@@ -26,6 +26,22 @@ REORGANIZE (10–40%) or REBUILD (>40%) fragmented indexes.
 * **Tunable**: thresholds, min page count, stats mode (`LIMITED`/`SAMPLED`/`DETAILED`), online & tempdb options.
 * **Outputs** ready-to-run `ALTER INDEX` statements.
 
+### `refresh_statistics.sql`
+
+Guides/statements for refreshing statistics **after index maintenance**.
+
+* **When to use**
+
+  * After **REORGANIZE** runs → update stats (reorganize doesn’t refresh them).
+  * After **REBUILD** runs → skip index stats (rebuild refreshes them with FULLSCAN), but consider refreshing **non-index (column) stats**.
+
+* **What this covers**
+
+  * Keeps index stats fresh without double work after REBUILDs.
+  * Ensures column stats (from AUTO\_CREATE\_STATISTICS / CREATE STATISTICS) are not forgotten.
+
+> Tip: Schedule stats refresh separately for heavy ETL days or ascending-key tables.
+## 
 ⚠️ **Important:** These are *suggestions*, not guarantees. Always:
 
 * Review the queries/plans before creating.
